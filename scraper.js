@@ -56,6 +56,16 @@ url('http://www.abc.net.au/news/federal-election-2016/guide/candidates/')
 			data.$electorateName = $tr.find('.electorate a').text().replace('Senate - ','').replace('(*)','').trim();
 			data.$electorateChamber = ($tr.find('.electorate a').text().indexOf('Senate') >= 0) ? 'senate' : 'house';
 
+			// Tidy up a couple of issues
+			if (data.$partyCode === 'SFP') {
+				data.$partyName = "Shooters, Fishers and Farmers";
+			}
+
+			if (data.$partyCode === '-') {
+				data.$partyCode = 'IND';
+				data.$partyName = 'Independent';
+			}
+
 			db.then(function(db) {
 				db.run("INSERT INTO data (partyCode, partyName, name, familyName, givenName, sitting, electorateCode, electorateState, electorateName, electorateChamber) VALUES ($partyCode, $partyName, $name, $familyName, $givenName, $sitting, $electorateCode, $electorateState, $electorateName, $electorateChamber)", data, (global.gc) ? global.gc : null);
 			}, handleErr);
