@@ -23,7 +23,6 @@ db = new Promise((resolve, reject) => {
 					name TEXT,
 					familyName TEXT,
 					givenName TEXT,
-					sitting INT,
 					electorateCode TEXT,
 					electorateState TEXT,
 					electorateName TEXT,
@@ -50,7 +49,6 @@ url('http://www.abc.net.au/news/federal-election-2016/guide/candidates/')
 			data.$name = $tr.find('.candidate').text().replace(/\(.*$/,'').trim();
 			data.$familyName = $tr.find('.candidate .familyname').text().trim();
 			data.$givenName = data.$name.replace(data.$familyName,'').trim();
-			data.$sitting = $tr.find('.candidate').text().indexOf('(Sitting MP)') > -1;
 			data.$electorateCode = (electorateCodeMatch) ? electorateCodeMatch[1] : null;
 			data.$electorateState = $tr.find('.electorate').text().replace('(*)','').match(/\((.+)\)/)[1];
 			data.$electorateName = $tr.find('.electorate a').text().replace('Senate - ','').replace('(*)','').trim();
@@ -67,7 +65,7 @@ url('http://www.abc.net.au/news/federal-election-2016/guide/candidates/')
 			}
 
 			db.then(function(db) {
-				db.run("INSERT INTO data (partyCode, partyName, name, familyName, givenName, sitting, electorateCode, electorateState, electorateName, electorateChamber) VALUES ($partyCode, $partyName, $name, $familyName, $givenName, $sitting, $electorateCode, $electorateState, $electorateName, $electorateChamber)", data, (global.gc) ? global.gc : null);
+				db.run("INSERT INTO data (partyCode, partyName, name, familyName, givenName, electorateCode, electorateState, electorateName, electorateChamber) VALUES ($partyCode, $partyName, $name, $familyName, $givenName, $electorateCode, $electorateState, $electorateName, $electorateChamber)", data, (global.gc) ? global.gc : null);
 			}, handleErr);
 
 		});
